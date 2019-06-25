@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.bottom_bar {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: red;
+   color: white;
+   text-align: center;
+   padding: 25px 50px 75px 100px;
+}
+
+
+.container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+.time-left {
+  float: left;
+  color: #999;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+function action_submit(){
+	var x = window.location.search.substr(1).split("=")[1]
+	var input = document.getElementById("myInput").value;
+	user_chat_box(input)
+	$.ajax
+  	({
+  	type:'post',
+ 	url:'https://13.232.26.171/cgi-bin/df.py',
+  	data:{q:input,s_id:x},
+  	success:function(response) {
+		bot_chat_box(response)
+  		}
+  	});
+}
+function check_key(){
+		var x=window.location.search.substr(1).split("=")[1]
+                $.ajax({
+                type:'post',
+                url:'https://13.232.26.171/cgi-bin/tokenvf.py',
+                data:{token:x},
+                success:function(response) {
+                        if(response==1){
+			document.getElementById("page_body").style.display = "block";
+			}
+			else{
+			alert("WRONG SESSION ID & USER-ACCOUNT");
+			window.location.href = "https://13.232.26.171/login.html";
+			}
+                }
+
+                });
+}
+
+
+function user_chat_box(message){
+        var img_link="https://image.flaticon.com/icons/png/512/64/64572.png";
+
+        var html_pattern='<img src="'+img_link+'" alt="Avatar" class="right" style="widht:100%;"><p>'+message+'</p>';
+        var countup = this;
+        var newNode = document.createElement('div');
+        newNode.className = 'container';
+        newNode.innerHTML = html_pattern;
+        document.getElementById('chat_box').appendChild(newNode);
+}
+
+function bot_chat_box(message){
+	var img_link="https://cdn-images-1.medium.com/max/1200/1*paQ7E6f2VyTKXHpR-aViFg.png";
+	
+	var html_pattern='<img src="'+img_link+'" alt="Avatar" class="right" style="widht:100%;"><p>'+message+'</p>';
+        var countup = this;
+        var newNode = document.createElement('div');
+        newNode.className = 'container darker';
+	newNode.innerHTML = html_pattern;
+        document.getElementById('chat_box').appendChild(newNode);
+}
+check_key();
+
+
+function play_yt_video(){
+video_link="https://www.youtube.com/watch?v=VWMZAZkFDbk"
+window.open(video_link);
+
+
+}
+
+
+
+</script>
+
+
+</head>
+<body id="page_body" hidden>
+<h2>Chat Messages</h2>
+
+<div id="chat_box">
+
+<div id="user_chat" class="container">
+  <img src="https://image.flaticon.com/icons/png/512/64/64572.png" alt="Avatar" style="width:100%;">
+  <p>Hello. How are you today?</p>
+</div>
+
+<div id="bot_chat" class="container darker">
+  <img src="https://cdn-images-1.medium.com/max/1200/1*paQ7E6f2VyTKXHpR-aViFg.png" alt="Avatar" class="right" style="width:100%;">
+  <p>Hey! I'm fine. Thanks for asking!</p>
+</div>
+
+</div>
+
+
+<div class="bottom_bar">
+<input id="myInput" type="text" name="query" size="35">
+<button id="myBtn" onclick="action_submit()">SUBMIT</button>
+<button id="yt_bt" onclick="play_yt_video()">Play Music</button>
+</div>
+
+</body>
+</html>
