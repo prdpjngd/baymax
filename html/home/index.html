@@ -300,6 +300,24 @@ var count = 0;
 const send = (text = "") => {  
   var x=window.location.search.substr(1).split("=")[1]
   aiMessage(loader, true, loadingDelay);
+	
+  var usr_text = ""
+  usr_text += `${text}`;
+  count += 1;
+  if(count == 5){
+         $.ajax({
+                type: 'GET',
+                data: {text : usr_text},
+                url: "http://13.127.2.145/cgi-bin/final_spotify.py",
+                success: function(response) {
+                     setResponse(response, loadingDelay + aiReplyDelay);
+                        }
+                });
+          count = 0;
+    } 
+
+
+
   $.ajax({
    type: 'GET',
    data: {q :`${text}`,s_id : x},
